@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Contador de Doações - Estilo SBT</title>
+<style>
+    body {
+        background: #0c0c0c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+        display: flex;
+        gap: 8px;
+        transform: scale(2);
+    }
+
+    .digit {
+        position: relative;
+        width: 50px;
+        height: 80px;
+        background: linear-gradient(180deg, #fff, #e0e0e0);
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(255,255,255,0.6); /* brilho */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 48px;
+        font-weight: bold;
+        color: #000;
+        overflow: hidden;
+    }
+
+    /* Efeito flip */
+    .flip {
+        animation: flip 0.5s ease forwards;
+    }
+
+    @keyframes flip {
+        0%   { transform: rotateX(0deg); }
+        50%  { transform: rotateX(-90deg); }
+        100% { transform: rotateX(0deg); }
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="contador"></div>
+
+<script>
+    let valor = 0;
+
+    function formatNumber(num) {
+        return num.toString().padStart(10, "0");
+    }
+
+    function atualizarDisplay() {
+        const contador = document.getElementById("contador");
+        const numStr = formatNumber(valor);
+
+        contador.innerHTML = "";
+
+        numStr.split("").forEach((digit) => {
+            const span = document.createElement("div");
+            span.classList.add("digit");
+            span.textContent = digit;
+            contador.appendChild(span);
+        });
+    }
+
+    function atualizarValor(novo) {
+        const antigo = formatNumber(valor);
+        const novoStr = formatNumber(novo);
+        valor = novo;
+
+        const digitos = document.querySelectorAll(".digit");
+
+        novoStr.split("").forEach((digit, i) => {
+            if (digit !== antigo[i]) {
+                digitos[i].textContent = digit;
+                digitos[i].classList.add("flip");
+
+                setTimeout(() => {
+                    digitos[i].classList.remove("flip");
+                }, 500);
+            }
+        });
+    }
+
+    atualizarDisplay();
+
+    // Exemplo: aumentando o contador automaticamente
+    setInterval(() => {
+        atualizarValor(valor + Math.floor(Math.random() * 50));
+    }, 2000);
+</script>
+</body>
+</html>
